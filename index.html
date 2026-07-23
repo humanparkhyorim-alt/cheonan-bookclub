@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>천안독서모임 — 서재</title>
+<meta name="description" content="천안독서모임의 책 아카이브. 진지하게 책읽고 토론.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      천안독서모임
+      <small>진지하게 책읽고 토론</small>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html" aria-current="page">서재</a>
+      <a href="meetings.html">모임 기록</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="hero-eyebrow">Cheonan Book Club Archive</p>
+    <h1>우리가 읽고<br>나눈 문장들의 서재</h1>
+    <p>모임이 끝나도 이야기는 여기 남습니다. 함께 읽은 책, 회차별 토론, 그날의 한 문장까지 — 천안독서모임의 기록입니다.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="num" id="hero-book-count">–</span>
+        <span class="label">등록된 책</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num" id="hero-meeting-count">–</span>
+        <span class="label">진행된 회차</span>
+      </div>
+    </div>
+  </div>
+  <div class="due-stamp"><span>DUE<br>DATE<br>&nbsp;</span></div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>서재</h2>
+      <span class="count" id="book-count"></span>
+    </div>
+    <div class="shelf" id="shelf-grid">
+      <p class="state-msg">불러오는 중…</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>천안독서모임 아카이브</span>
+    <span>Data via Google Sheets</span>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/sample-data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
