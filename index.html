@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>천안독서모임 — 진지하게 책읽고 토론</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-cover" id="heroCover">
+        <span class="cover-title" id="heroBookTitle">데미안</span>
+      </div>
+      <div class="hero-text">
+        <p class="eyebrow">Cheonan Book Club · Since 2026</p>
+        <h1 class="club-name">천안독서모임<br>진지하게 책읽고 토론</h1>
+        <p class="tagline">한 권의 책, 여러 개의 시선<br>매달 천안에서 만납니다</p>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num" id="statMeetings">—</span><span class="stat-label">회차</span></div>
+          <div class="stat"><span class="stat-num" id="statBooks">—</span><span class="stat-label">권</span></div>
+          <div class="stat"><span class="stat-num" id="statMembers">—</span><span class="stat-label">멤버</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV TABS -->
+  <nav class="tab-nav">
+    <button class="tab active" data-tab="meetings">회차 기록</button>
+    <button class="tab" data-tab="books">책 아카이브</button>
+    <button class="tab" data-tab="gallery">갤러리</button>
+    <button class="tab" data-tab="members">멤버</button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+
+    <!-- 회차 기록 -->
+    <section id="tab-meetings" class="tab-panel active">
+      <div class="section-label">모임 기록</div>
+      <div id="currentBook"></div>
+      <div id="meetingsList" class="meetings-list">
+        <div class="loading">불러오는 중…</div>
+      </div>
+    </section>
+
+    <!-- 책 아카이브 -->
+    <section id="tab-books" class="tab-panel">
+      <div class="section-label">읽은 책</div>
+      <div id="bookGrid" class="book-grid">
+        <div class="loading">불러오는 중…</div>
+      </div>
+    </section>
+
+    <!-- 갤러리 -->
+    <section id="tab-gallery" class="tab-panel">
+      <div class="section-label">모임 사진</div>
+      <div id="galleryGrid" class="gallery-grid">
+        <div class="loading">불러오는 중…</div>
+      </div>
+    </section>
+
+    <!-- 멤버 -->
+    <section id="tab-members" class="tab-panel">
+      <div class="section-label">멤버</div>
+      <div id="membersList" class="members-list">
+        <div class="loading">불러오는 중…</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span class="footer-logo">천안독서모임</span>
+    <span class="footer-copy">진지하게 책읽고 토론 · 천안</span>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
