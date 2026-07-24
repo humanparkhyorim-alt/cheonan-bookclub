@@ -28,26 +28,33 @@ async function fetchSheet(sheet) {
   return await res.json();
 }
 
-// ── Google Books API 직접 호출 (키 제거, 에러 노출) ──
+// ── Google Books API 직접 호출 ──
+// maxResults를 여러 개 받아서, 그중 표지 이미지(imageLinks)가 있는
+// 첫 번째 판본을 골라 씀. (검색 1등 판본에 표지가 없는 경우 대응)
 async function fetchBookCover(title, author) {
   try {
     const q = author ? `${title} ${author}` : title;
     const res = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=1`
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=10&key=AIzaSyBm9D8bUspMGBhC4-P5DO_Qv-i8cA6sYA8`
     );
     if (!res.ok) {
       console.warn('구글북스 API 응답 실패:', res.status);
       return { cover: '', description: '' };
     }
     const data = await res.json();
-    if (data.items && data.items.length > 0) {
-      const info = data.items[0].volumeInfo;
-      return {
-        cover: (info.imageLinks?.thumbnail || '').replace('http:', 'https:'),
-        description: info.description || ''
-      };
-    }
-  } catch (e) { console.warn('표지 오류:', e); }
+    if (!data.items) return { cover: '', description: '' };
+
+    const match = data.items.find(item => item.volumeInfo?.imageLinks?.thumbnail);
+    if (!match) return { cover: '', description: '' };
+
+    const info = match.volumeInfo;
+    return {
+      cover: info.imageLinks.thumbnail.replace('http:', 'https:'),
+      description: info.description || ''
+    };
+  } catch (e) {
+    console.warn('표지 오류:', e);
+  }
   return { cover: '', description: '' };
 }
 
@@ -76,9 +83,15 @@ async function renderCurrentBook(books) {
   const current = books.find(b => b.status === 'current');
   if (!current) { el.style.display = 'none'; return; }
 
-  const kakao = await fetchBookCover(current.title);
-  const coverSrc = current.cover || kakao.cover;
-  const desc = current.description || kakao.description || '';
+  let coverSrc = current.cover;
+  let desc = current.description || '';
+
+  if (!coverSrc) {
+    const fetched = await fetchBookCover(current.title, current.author);
+    coverSrc = fetched.cover;
+    if (!desc) desc = fetched.description;
+  }
+
   const questions = current.questions ? current.questions.split(',') : [];
   const dday = getDday(current.meeting_date);
 
@@ -138,8 +151,8 @@ async function renderBooks(books) {
 
   const withCovers = await Promise.all(books.map(async b => {
     if (b.cover) return b;
-    const kakao = await fetchBookCover(b.title);
-    return { ...b, cover: kakao.cover };
+    const fetched = await fetchBookCover(b.title, b.author);
+    return { ...b, cover: fetched.cover };
   }));
 
   el.innerHTML = withCovers.map(b => `
