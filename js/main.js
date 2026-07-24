@@ -25,29 +25,17 @@ function openLightbox(src) {
 async function fetchSheet(sheet) {
   const url = `${APPS_SCRIPT_URL}?sheet=${sheet}`;
   const res = await fetch(url);
-  const data = await res.json();
-  return data;
+  return await res.json();
 }
 
-
-
-const GOOGLE_BOOKS_API_KEY = "AIzaSyBm9D8bUspMGBhC4-P5DO_Qv-i8cA6sYA8";
-
-// ── Google Books API로 책 검색 ──
+// ── Apps Script 통해 책 표지 검색 (CORS 우회) ──
 async function fetchBookCover(title) {
   try {
-    const res = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(title)}&key=${GOOGLE_BOOKS_API_KEY}&maxResults=1&langRestrict=ko`
-    );
+    const url = `${APPS_SCRIPT_URL}?sheet=bookcover&title=${encodeURIComponent(title)}`;
+    const res = await fetch(url);
     const data = await res.json();
-    if (data.items && data.items.length > 0) {
-      const info = data.items[0].volumeInfo;
-      return {
-        cover: info.imageLinks?.thumbnail?.replace('http:', 'https:') || '',
-        description: info.description || '',
-      };
-    }
-  } catch (e) { console.warn('Google Books API 오류:', e); }
+    return { cover: data.cover || '', description: data.description || '' };
+  } catch (e) { console.warn('표지 검색 오류:', e); }
   return { cover: '', description: '' };
 }
 
