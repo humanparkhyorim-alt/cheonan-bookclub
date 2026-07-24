@@ -43,8 +43,7 @@ async function fetchBookCover(title) {
     if (data.items && data.items.length > 0) {
       const info = data.items[0].volumeInfo;
       return {
-        cover: info.imageLinks?.thumbnail?.replace('http:', 'https:') || '',
-        description: info.description || '',
+        cover: info.imageLinks?.thumbnail?.replace('http:', 'https:').replace('zoom=1', 'zoom=3') || '',
       };
     }
   } catch (e) { console.warn('Google Books API 오류:', e); }
