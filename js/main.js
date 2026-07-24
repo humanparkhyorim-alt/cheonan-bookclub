@@ -28,14 +28,23 @@ async function fetchSheet(sheet) {
   return await res.json();
 }
 
-// ── Apps Script 통해 책 표지 검색 (CORS 우회) ──
+// ── Open Library API로 책 표지 검색 (키 불필요, CORS 없음) ──
 async function fetchBookCover(title) {
   try {
-    const url = `${APPS_SCRIPT_URL}?sheet=bookcover&title=${encodeURIComponent(title)}`;
-    const res = await fetch(url);
+    const res = await fetch(
+      `https://openlibrary.org/search.json?title=${encodeURIComponent(title)}&limit=1`
+    );
     const data = await res.json();
-    return { cover: data.cover || '', description: data.description || '' };
-  } catch (e) { console.warn('표지 검색 오류:', e); }
+    if (data.docs && data.docs.length > 0) {
+      const coverId = data.docs[0].cover_i;
+      if (coverId) {
+        return {
+          cover: `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`,
+          description: data.docs[0].first_sentence?.[0] || ''
+        };
+      }
+    }
+  } catch (e) { console.warn('표지 오류:', e); }
   return { cover: '', description: '' };
 }
 
