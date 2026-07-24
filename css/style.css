@@ -438,7 +438,7 @@ body {
   align-items: center;
 }
 .current-cover-wrap {
-  width: 100%;
+  width: 320px;
   max-width: 320px;
   height: 460px;
   background: #7B4F2E;
