@@ -29,23 +29,25 @@ async function fetchSheet(sheet) {
   return data;
 }
 
-const KAKAO_API_KEY = "3bea7d660e89d4d70ff023f81cea0988";
 
-// ── 카카오 책 검색 ──
+
+const GOOGLE_BOOKS_API_KEY = "AIzaSyBm9D8bUspMGBhC4-P5DO_Qv-i8cA6sYA8";
+
+// ── Google Books API로 책 검색 ──
 async function fetchBookCover(title) {
   try {
     const res = await fetch(
-      `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(title)}&size=1`,
-      { headers: { Authorization: `KakaoAK ${KAKAO_API_KEY}` } }
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(title)}&key=${GOOGLE_BOOKS_API_KEY}&maxResults=1&langRestrict=ko`
     );
     const data = await res.json();
-    if (data.documents && data.documents.length > 0) {
+    if (data.items && data.items.length > 0) {
+      const info = data.items[0].volumeInfo;
       return {
-        cover: data.documents[0].thumbnail,
-        description: data.documents[0].contents,
+        cover: info.imageLinks?.thumbnail?.replace('http:', 'https:') || '',
+        description: info.description || '',
       };
     }
-  } catch (e) { console.warn('카카오 API 오류:', e); }
+  } catch (e) { console.warn('Google Books API 오류:', e); }
   return { cover: '', description: '' };
 }
 
