@@ -28,12 +28,17 @@ async function fetchSheet(sheet) {
   return await res.json();
 }
 
-// ── Google Books API 직접 호출 ──
-async function fetchBookCover(title) {
+// ── Google Books API 직접 호출 (키 제거, 에러 노출) ──
+async function fetchBookCover(title, author) {
   try {
+    const q = author ? `${title} ${author}` : title;
     const res = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(title)}&maxResults=1&key=AIzaSyBm9D8bUspMGBhC4-P5DO_Qv-i8cA6sYA8`
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=1`
     );
+    if (!res.ok) {
+      console.warn('구글북스 API 응답 실패:', res.status);
+      return { cover: '', description: '' };
+    }
     const data = await res.json();
     if (data.items && data.items.length > 0) {
       const info = data.items[0].volumeInfo;
