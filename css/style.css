@@ -428,87 +428,100 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 22px;
+  padding: 28px;
   margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .current-book-inner {
   display: flex;
   flex-direction: column;
-  gap: 20px;
   align-items: center;
+  gap: 20px;
+  width: 100%;
 }
 .current-cover-wrap {
-  width: 320px;
-  max-width: 320px;
-  height: 460px;
+  width: 220px;
+  height: 320px;
   background: #7B4F2E;
   border-radius: 2px 8px 8px 2px;
-  box-shadow: -4px 6px 20px rgba(0,0,0,0.35), inset -4px 0 8px rgba(0,0,0,0.2);
+  box-shadow: -6px 8px 24px rgba(0,0,0,0.35), inset -4px 0 8px rgba(0,0,0,0.2);
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
 }
 .current-cover-wrap::after {
   content: '';
-  position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+  position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
   background: rgba(0,0,0,0.22);
 }
 .current-cover-img {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  display: block;
+}
+.current-book-info {
+  text-align: center;
+  width: 100%;
 }
 .current-label {
   font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--text-faint);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .current-title {
   font-family: var(--serif);
-  font-size: 18px;
+  font-size: 24px;
   color: var(--brown-deep);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .current-author {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .current-dday {
   display: inline-block;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--brown-light);
   background: var(--sand-light);
-  padding: 3px 10px;
+  padding: 4px 14px;
   border-radius: 20px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .current-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
-  line-height: 1.7;
+  line-height: 1.8;
+  max-width: 400px;
+  margin: 0 auto;
 }
 .current-questions {
-  margin-top: 18px;
-  padding-top: 16px;
+  margin-top: 22px;
+  padding-top: 18px;
   border-top: 1px solid var(--border);
+  width: 100%;
 }
 .questions-label {
   font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--text-faint);
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  text-align: center;
 }
 .question-item {
   font-family: var(--serif);
-  font-size: 13px;
+  font-size: 14px;
   color: #4A3420;
-  line-height: 1.7;
-  padding: 8px 12px;
+  line-height: 1.8;
+  padding: 10px 16px;
   background: #F5EFE4;
-  border-left: 2px solid #C4935A;
+  border-left: 3px solid #C4935A;
   border-radius: 0 6px 6px 0;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
