@@ -28,21 +28,19 @@ async function fetchSheet(sheet) {
   return await res.json();
 }
 
-// ── Open Library API로 책 표지 검색 (키 불필요, CORS 없음) ──
+// ── Google Books API 직접 호출 ──
 async function fetchBookCover(title) {
   try {
     const res = await fetch(
-      `https://openlibrary.org/search.json?title=${encodeURIComponent(title)}&limit=1`
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(title)}&maxResults=1&key=AIzaSyBm9D8bUspMGBhC4-P5DO_Qv-i8cA6sYA8`
     );
     const data = await res.json();
-    if (data.docs && data.docs.length > 0) {
-      const coverId = data.docs[0].cover_i;
-      if (coverId) {
-        return {
-          cover: `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`,
-          description: data.docs[0].first_sentence?.[0] || ''
-        };
-      }
+    if (data.items && data.items.length > 0) {
+      const info = data.items[0].volumeInfo;
+      return {
+        cover: (info.imageLinks?.thumbnail || '').replace('http:', 'https:'),
+        description: info.description || ''
+      };
     }
   } catch (e) { console.warn('표지 오류:', e); }
   return { cover: '', description: '' };
