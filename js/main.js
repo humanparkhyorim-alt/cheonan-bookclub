@@ -220,7 +220,21 @@ function renderMembers(members) {
     </div>
   `).join('');
 }
+// ── 노션 아카이브 렌더 ──
+function renderNotion(items) {
+  const el = document.getElementById('notionGrid');
+  if (!items.length) { el.innerHTML = '<p class="loading">아직 등록된 기록이 없어요</p>'; return; }
 
+  el.innerHTML = items.map(n => `
+    <div class="notion-card">
+      <div class="notion-icon">${n.emoji || '📝'}</div>
+      <div class="notion-title">${n.title || '(제목 없음)'}</div>
+      ${n.date ? `<div class="notion-date">${n.date}</div>` : ''}
+      ${n.description ? `<div class="notion-desc">${n.description}</div>` : ''}
+      ${n.url ? `<a class="notion-link" href="${n.url}" target="_blank" rel="noopener">노션에서 보기 ↗</a>` : ''}
+    </div>
+  `).join('');
+}
 // ── 히어로 통계 업데이트 ──
 function updateStats(meetings, books, members) {
   document.getElementById('statMeetings').textContent = meetings.length;
@@ -232,21 +246,21 @@ function updateStats(meetings, books, members) {
 }
 
 // ── 전체 초기화 ──
-async function init() {
-  try {
-    const [meetings, books, gallery, members] = await Promise.all([
-      fetchSheet('meetings'),
-      fetchSheet('books'),
-      fetchSheet('gallery'),
-      fetchSheet('members'),
-    ]);
+const [meetings, books, gallery, members, notion] = await Promise.all([
+  fetchSheet('meetings'),
+  fetchSheet('books'),
+  fetchSheet('gallery'),
+  fetchSheet('members'),
+  fetchSheet('notion'),
+]);
 
-    await renderCurrentBook(books);
-    renderMeetings(meetings);
-    await renderBooks(books);
-    renderGallery(gallery);
-    renderMembers(members);
-    updateStats(meetings, books, members);
+await renderCurrentBook(books);
+renderMeetings(meetings);
+await renderBooks(books);
+renderGallery(gallery);
+renderMembers(members);
+renderNotion(notion);
+updateStats(meetings, books, members);
 
   } catch (e) {
     console.error(e);
