@@ -156,7 +156,7 @@ async function renderBooks(books) {
   }));
 
   el.innerHTML = withCovers.map(b => {
-    const questions = b.questions ? b.questions.split('|').map(q => q.trim()).filter(Boolean) : [];
+    const questions = b.discussion_questions ? b.discussion_questions.split('|').map(q => q.trim()).filter(Boolean) : [];
     const sources = b.sources ? b.sources.split('|').map(s => s.trim()).filter(Boolean) : [];
 
     // "이름 (URL)" 형식을 링크로 변환
