@@ -518,7 +518,52 @@ body {
   border-radius: 0 6px 6px 0;
   margin-bottom: 10px;
 }
-
+/* ── 책 카드 안 생각해볼거리 ── */
+.book-discussion {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+  text-align: left;
+}
+.discussion-context {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.discussion-label {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.discussion-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
+}
+.discussion-list li {
+  font-family: var(--serif);
+  font-size: 12px;
+  color: #4A3420;
+  line-height: 1.6;
+  padding: 6px 10px;
+  background: #F5EFE4;
+  border-left: 2px solid #C4935A;
+  border-radius: 0 4px 4px 0;
+  margin-bottom: 6px;
+}
+.discussion-source {
+  font-size: 10px;
+  color: var(--text-faint);
+  line-height: 1.6;
+}
+.discussion-source a {
+  color: var(--brown-light);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--brown-light);
+}
 /* ── 반응형 ── */
 @media (max-width: 720px) {
   .current-book-inner { flex-direction: column; }
