@@ -29,8 +29,6 @@ async function fetchSheet(sheet) {
 }
 
 // ── Google Books API 직접 호출 ──
-// maxResults를 여러 개 받아서, 그중 표지 이미지(imageLinks)가 있는
-// 첫 번째 판본을 골라 씀. (검색 1등 판본에 표지가 없는 경우 대응)
 async function fetchBookCover(title, author) {
   try {
     const q = author ? `${title} ${author}` : title;
@@ -159,7 +157,6 @@ async function renderBooks(books) {
     const questions = b.discussion_questions ? b.discussion_questions.split('|').map(q => q.trim()).filter(Boolean) : [];
     const sources = b.sources ? b.sources.split('|').map(s => s.trim()).filter(Boolean) : [];
 
-    // "이름 (URL)" 형식을 링크로 변환
     const sourceLinks = sources.map(s => {
       const m = s.match(/^(.*)\((https?:\/\/[^)]+)\)$/);
       return m ? `<a href="${m[2]}" target="_blank" rel="noopener">${m[1].trim()}</a>` : s;
@@ -221,6 +218,22 @@ function renderMembers(members) {
   `).join('');
 }
 
+// ── 노션 아카이브 렌더 ──
+function renderNotion(items) {
+  const el = document.getElementById('notionGrid');
+  if (!items.length) { el.innerHTML = '<p class="loading">아직 등록된 기록이 없어요</p>'; return; }
+
+  el.innerHTML = items.map(n => `
+    <div class="notion-card">
+      <div class="notion-icon">${n.emoji || '📝'}</div>
+      <div class="notion-title">${n.title || '(제목 없음)'}</div>
+      ${n.date ? `<div class="notion-date">${n.date}</div>` : ''}
+      ${n.description ? `<div class="notion-desc">${n.description}</div>` : ''}
+      ${n.url ? `<a class="notion-link" href="${n.url}" target="_blank" rel="noopener">노션에서 보기 ↗</a>` : ''}
+    </div>
+  `).join('');
+}
+
 // ── 히어로 통계 업데이트 ──
 function updateStats(meetings, books, members) {
   document.getElementById('statMeetings').textContent = meetings.length;
@@ -232,27 +245,23 @@ function updateStats(meetings, books, members) {
 }
 
 // ── 전체 초기화 ──
+// 섹션 하나가 실패해도 나머지 섹션은 정상적으로 뜨도록 각각 따로 처리함
 async function init() {
-  try {
-    const [meetings, books, gallery, members] = await Promise.all([
-      fetchSheet('meetings'),
-      fetchSheet('books'),
-      fetchSheet('gallery'),
-      fetchSheet('members'),
-    ]);
+  const [meetings, books, gallery, members, notion] = await Promise.all([
+    fetchSheet('meetings').catch(() => []),
+    fetchSheet('books').catch(() => []),
+    fetchSheet('gallery').catch(() => []),
+    fetchSheet('members').catch(() => []),
+    fetchSheet('notion').catch(() => []),
+  ]);
 
-    await renderCurrentBook(books);
-    renderMeetings(meetings);
-    await renderBooks(books);
-    renderGallery(gallery);
-    renderMembers(members);
-    updateStats(meetings, books, members);
-
-  } catch (e) {
-    console.error(e);
-    document.getElementById('meetingsList').innerHTML =
-      '<p class="loading">⚠️ 데이터를 불러오지 못했어요. config.js의 URL을 확인해주세요.</p>';
-  }
+  try { await renderCurrentBook(books); } catch (e) { console.error('현재책 오류', e); }
+  try { renderMeetings(meetings); } catch (e) { console.error('회차 오류', e); }
+  try { await renderBooks(books); } catch (e) { console.error('책 오류', e); }
+  try { renderGallery(gallery); } catch (e) { console.error('갤러리 오류', e); }
+  try { renderMembers(members); } catch (e) { console.error('멤버 오류', e); }
+  try { renderNotion(notion); } catch (e) { console.error('노션 오류', e); }
+  try { updateStats(meetings, books, members); } catch (e) { console.error('통계 오류', e); }
 }
 
 init();
