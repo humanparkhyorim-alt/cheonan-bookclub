@@ -564,6 +564,73 @@ body {
   text-decoration: none;
   border-bottom: 1px dotted var(--brown-light);
 }
+
+/* ── 노션 아카이브 카드 ── */
+.notion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+.notion-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 20px 20px;
+  overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.notion-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--sand) 100%);
+}
+.notion-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px -12px rgba(44, 31, 14, 0.35);
+}
+.notion-icon {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--sand-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+.notion-title {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--brown-deep);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+.notion-date {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-bottom: 10px;
+}
+.notion-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.notion-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--card-bg);
+  background: var(--brown-mid);
+  padding: 7px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background .15s ease;
+}
+.notion-link:hover { background: var(--brown-deep); }
 /* ── 반응형 ── */
 @media (max-width: 720px) {
   .current-book-inner { flex-direction: column; }
