@@ -29,8 +29,6 @@ async function fetchSheet(sheet) {
 }
 
 // ── Google Books API 직접 호출 ──
-// maxResults를 여러 개 받아서, 그중 표지 이미지(imageLinks)가 있는
-// 첫 번째 판본을 골라 씀. (검색 1등 판본에 표지가 없는 경우 대응)
 async function fetchBookCover(title, author) {
   try {
     const q = author ? `${title} ${author}` : title;
@@ -159,7 +157,6 @@ async function renderBooks(books) {
     const questions = b.discussion_questions ? b.discussion_questions.split('|').map(q => q.trim()).filter(Boolean) : [];
     const sources = b.sources ? b.sources.split('|').map(s => s.trim()).filter(Boolean) : [];
 
-    // "이름 (URL)" 형식을 링크로 변환
     const sourceLinks = sources.map(s => {
       const m = s.match(/^(.*)\((https?:\/\/[^)]+)\)$/);
       return m ? `<a href="${m[2]}" target="_blank" rel="noopener">${m[1].trim()}</a>` : s;
@@ -220,6 +217,7 @@ function renderMembers(members) {
     </div>
   `).join('');
 }
+
 // ── 노션 아카이브 렌더 ──
 function renderNotion(items) {
   const el = document.getElementById('notionGrid');
@@ -235,6 +233,7 @@ function renderNotion(items) {
     </div>
   `).join('');
 }
+
 // ── 히어로 통계 업데이트 ──
 function updateStats(meetings, books, members) {
   document.getElementById('statMeetings').textContent = meetings.length;
@@ -246,21 +245,23 @@ function updateStats(meetings, books, members) {
 }
 
 // ── 전체 초기화 ──
-const [meetings, books, gallery, members, notion] = await Promise.all([
-  fetchSheet('meetings'),
-  fetchSheet('books'),
-  fetchSheet('gallery'),
-  fetchSheet('members'),
-  fetchSheet('notion'),
-]);
+async function init() {
+  try {
+    const [meetings, books, gallery, members, notion] = await Promise.all([
+      fetchSheet('meetings'),
+      fetchSheet('books'),
+      fetchSheet('gallery'),
+      fetchSheet('members'),
+      fetchSheet('notion'),
+    ]);
 
-await renderCurrentBook(books);
-renderMeetings(meetings);
-await renderBooks(books);
-renderGallery(gallery);
-renderMembers(members);
-renderNotion(notion);
-updateStats(meetings, books, members);
+    await renderCurrentBook(books);
+    renderMeetings(meetings);
+    await renderBooks(books);
+    renderGallery(gallery);
+    renderMembers(members);
+    renderNotion(notion);
+    updateStats(meetings, books, members);
 
   } catch (e) {
     console.error(e);
