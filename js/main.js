@@ -155,18 +155,39 @@ async function renderBooks(books) {
     return { ...b, cover: fetched.cover };
   }));
 
-  el.innerHTML = withCovers.map(b => `
-    <div class="book-item">
-      <div class="book-cover-wrap">
-        ${b.cover
-          ? `<img class="book-cover-img" src="${b.cover}" alt="${b.title}" onclick="openLightbox('${b.cover}')" />`
-          : `<span class="book-cover-text">${b.title}</span>`}
+  el.innerHTML = withCovers.map(b => {
+    const questions = b.questions ? b.questions.split('|').map(q => q.trim()).filter(Boolean) : [];
+    const sources = b.sources ? b.sources.split('|').map(s => s.trim()).filter(Boolean) : [];
+
+    // "이름 (URL)" 형식을 링크로 변환
+    const sourceLinks = sources.map(s => {
+      const m = s.match(/^(.*)\((https?:\/\/[^)]+)\)$/);
+      return m ? `<a href="${m[2]}" target="_blank" rel="noopener">${m[1].trim()}</a>` : s;
+    }).join(', ');
+
+    return `
+      <div class="book-item">
+        <div class="book-cover-wrap">
+          ${b.cover
+            ? `<img class="book-cover-img" src="${b.cover}" alt="${b.title}" onclick="openLightbox('${b.cover}')" />`
+            : `<span class="book-cover-text">${b.title}</span>`}
+        </div>
+        <div class="book-item-title">${b.title}</div>
+        <div class="book-item-author">${b.author}</div>
+        ${b.rating ? `<div class="book-rating">${renderStars(parseFloat(b.rating))}</div>` : ''}
+        ${(b.context || questions.length) ? `
+          <div class="book-discussion">
+            ${b.context ? `<p class="discussion-context">${b.context}</p>` : ''}
+            ${questions.length ? `
+              <p class="discussion-label">생각해볼 것들</p>
+              <ul class="discussion-list">
+                ${questions.map(q => `<li>${q}</li>`).join('')}
+              </ul>` : ''}
+            ${sourceLinks ? `<p class="discussion-source">출처: ${sourceLinks}</p>` : ''}
+          </div>` : ''}
       </div>
-      <div class="book-item-title">${b.title}</div>
-      <div class="book-item-author">${b.author}</div>
-      ${b.rating ? `<div class="book-rating">${renderStars(parseFloat(b.rating))}</div>` : ''}
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 // ── 갤러리 렌더 ──
