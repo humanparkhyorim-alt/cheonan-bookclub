@@ -245,29 +245,23 @@ function updateStats(meetings, books, members) {
 }
 
 // ── 전체 초기화 ──
+// 섹션 하나가 실패해도 나머지 섹션은 정상적으로 뜨도록 각각 따로 처리함
 async function init() {
-  try {
-    const [meetings, books, gallery, members, notion] = await Promise.all([
-      fetchSheet('meetings'),
-      fetchSheet('books'),
-      fetchSheet('gallery'),
-      fetchSheet('members'),
-      fetchSheet('notion'),
-    ]);
+  const [meetings, books, gallery, members, notion] = await Promise.all([
+    fetchSheet('meetings').catch(() => []),
+    fetchSheet('books').catch(() => []),
+    fetchSheet('gallery').catch(() => []),
+    fetchSheet('members').catch(() => []),
+    fetchSheet('notion').catch(() => []),
+  ]);
 
-    await renderCurrentBook(books);
-    renderMeetings(meetings);
-    await renderBooks(books);
-    renderGallery(gallery);
-    renderMembers(members);
-    renderNotion(notion);
-    updateStats(meetings, books, members);
-
-  } catch (e) {
-    console.error(e);
-    document.getElementById('meetingsList').innerHTML =
-      '<p class="loading">⚠️ 데이터를 불러오지 못했어요. config.js의 URL을 확인해주세요.</p>';
-  }
+  try { await renderCurrentBook(books); } catch (e) { console.error('현재책 오류', e); }
+  try { renderMeetings(meetings); } catch (e) { console.error('회차 오류', e); }
+  try { await renderBooks(books); } catch (e) { console.error('책 오류', e); }
+  try { renderGallery(gallery); } catch (e) { console.error('갤러리 오류', e); }
+  try { renderMembers(members); } catch (e) { console.error('멤버 오류', e); }
+  try { renderNotion(notion); } catch (e) { console.error('노션 오류', e); }
+  try { updateStats(meetings, books, members); } catch (e) { console.error('통계 오류', e); }
 }
 
 init();
