@@ -229,7 +229,7 @@ function renderNotion(items) {
       <div class="notion-title">${n.title || '(제목 없음)'}</div>
       ${n.date ? `<div class="notion-date">${n.date}</div>` : ''}
       ${n.description ? `<div class="notion-desc">${n.description}</div>` : ''}
-      ${n.url ? `<a class="notion-link" href="${n.url}" target="_blank" rel="noopener">아카이빙 보기 ↗</a>` : ''}
+      ${n.url ? `<a class="notion-link" href="${n.url}" target="_blank" rel="noopener">아카이빙보기 ↗</a>` : ''}
     </div>
   `).join('');
 }
