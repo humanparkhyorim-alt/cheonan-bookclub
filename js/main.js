@@ -102,7 +102,7 @@ async function renderCurrentBook(books) {
             : `<span class="cover-title">${current.title}</span>`}
         </div>
         <div class="current-book-info">
-          <div class="current-label">📖 이번 달 책</div>
+          <div class="current-label">📖 이번 책</div>
           <div class="current-title">${current.title}</div>
           <div class="current-author">${current.author}</div>
           ${dday ? `<div class="current-dday">${dday}</div>` : ''}
